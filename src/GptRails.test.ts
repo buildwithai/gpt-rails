@@ -24,7 +24,7 @@ describe("GptRails", () => {
 
     // Verify the request was made with the correct parameters
     expect(fetch).toHaveBeenCalledWith(
-      "https://api.gptrails.xyz/api/v1/generate",
+      "https://api.gptrails.xyz/api/v1/completion",
       {
         method: "POST",
         headers: {

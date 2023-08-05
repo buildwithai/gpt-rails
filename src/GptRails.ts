@@ -13,7 +13,7 @@ export class GptRails {
     templateId: string;
     args: Record<string, any>;
   }) {
-    const url = `${this.apiUrl}/generate`;
+    const url = `${this.apiUrl}/completion`;
     const payload = { templateId, args };
 
     try {
