@@ -1,25 +1,44 @@
-import { GptRails } from "../src/GptRails";
+import fetch from "jest-fetch-mock";
+import { GptRails } from "./GptRails";
 
 describe("GptRails", () => {
-  let gptRails: GptRails;
-
   beforeEach(() => {
-    gptRails = new GptRails("your-api-key");
+    // Clear all instances and calls to constructor and all methods:
+    fetch.resetMocks();
   });
 
-  it("should create a GptRails instance with the correct API key", () => {
-    expect(gptRails).toBeDefined();
-    // If you have a way to access the apiKey within GptRails, you can also test that it's set correctly
-  });
+  it("should generate content using the given template and args", async () => {
+    // Prepare mock response
+    const mockResponse = { success: true, content: "Generated content" };
 
-  it("should connect to GptRails", () => {
-    // Here you might mock any dependencies required for connecting and test that the connection is successful
-    // You can also use libraries like 'jest-mock-axios' if your SDK is making HTTP requests
-    // Example:
-    // jest.mock('axios');
-    // gptRails.connect();
-    // expect(axios.post).toHaveBeenCalled();
-  });
+    fetch.mockResponseOnce(JSON.stringify(mockResponse));
 
-  // Add other test cases for the various methods and functionality of your SDK
+    // Create an instance of GptRails
+    const gptRails = new GptRails("your-api-key");
+
+    // Call the generate method
+    const result = await gptRails.generate({
+      templateId: "generate-recipe",
+      args: { cuisine: "italian", prepTime: "short" },
+    });
+
+    // Verify the request was made with the correct parameters
+    expect(fetch).toHaveBeenCalledWith(
+      "https://api.gptrails.xyz/api/v1/generate",
+      {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer your-api-key",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          templateId: "generate-recipe",
+          args: { cuisine: "italian", prepTime: "short" },
+        }),
+      }
+    );
+
+    // Verify the result
+    expect(result).toEqual(mockResponse);
+  });
 });
