@@ -1,0 +1,15 @@
+# Dependencies
+/node_modules
+
+# Build artifacts
+/dist
+
+# IDE and Editor files
+/.idea
+.vscode
+
+# Environment files
+.env
+
+# Jest cache
+/.jest
